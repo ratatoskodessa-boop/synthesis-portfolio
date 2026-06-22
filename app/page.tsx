@@ -101,17 +101,18 @@ function About() {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end end"] });
   
-  // Жорстко прописуємо зміну фону: світлий -> темний -> світлий
-  const bgChange = useTransform(scrollYProgress, [0, 0.25, 0.35, 0.65, 0.75, 1], ['#F4F6F8', '#F4F6F8', '#2D3339', '#2D3339', '#F4F6F8', '#F4F6F8']);
-  const textChange = useTransform(scrollYProgress, [0, 0.25, 0.35, 0.65, 0.75, 1], ['#2D3339', '#2D3339', '#F4F6F8', '#F4F6F8', '#2D3339', '#2D3339']);
+  // Плавний перехід через кольори Hero (Пастельний рожевий -> синій -> зелений)
+  const bgChange = useTransform(scrollYProgress, 
+    [0, 0.25, 0.35, 0.65, 0.75, 1], 
+    ['#F4F6F8', '#fbcfe8', '#bfdbfe', '#a7f3d0', '#F4F6F8', '#F4F6F8']
+  );
   
-  // Чітко вказуємо, що коли з'являється один текст, інший МАЄ бути на 0
   const opacity1 = useTransform(scrollYProgress, [0, 0.25, 0.35, 1], [1, 1, 0, 0]);
   const opacity2 = useTransform(scrollYProgress, [0, 0.25, 0.35, 0.65, 0.75, 1], [0, 0, 1, 1, 0, 0]);
   const opacity3 = useTransform(scrollYProgress, [0, 0.65, 0.75, 1], [0, 0, 1, 1]);
 
   return (
-    <motion.section ref={containerRef} style={{ backgroundColor: bgChange, color: textChange }} className="relative h-[300vh] transition-colors duration-300">
+    <motion.section ref={containerRef} style={{ backgroundColor: bgChange }} className="relative h-[300vh] transition-colors duration-300 text-foreground">
       <div className="sticky top-0 h-screen flex flex-col justify-center items-center px-8 text-center max-w-5xl mx-auto overflow-hidden">
         
         {/* Теза 1 */}
@@ -122,13 +123,13 @@ function About() {
 
         {/* Теза 2 */}
         <motion.div style={{ opacity: opacity2 }} className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
-          <h2 className="font-syne text-5xl md:text-7xl font-bold mb-6 text-mint">Not an external vendor.</h2>
+          <h2 className="font-syne text-5xl md:text-7xl font-bold mb-6 text-foreground">Not an external vendor.</h2>
           <p className="text-xl md:text-2xl max-w-3xl leading-relaxed">Our superpower is combining a warm, human way of working with a premium standard of execution.</p>
         </motion.div>
 
         {/* Теза 3 */}
         <motion.div style={{ opacity: opacity3 }} className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
-          <h3 className="font-syne text-3xl font-bold mb-8 text-cyan">What we believe</h3>
+          <h3 className="font-syne text-3xl font-bold mb-8 text-foreground/70">What we believe</h3>
           <p className="text-2xl md:text-4xl font-syne max-w-4xl leading-snug">
             Good design is respect for someone's time. <br/> Simplicity is harder than complexity. <br/> And nothing great is ever built alone.
           </p>
@@ -270,16 +271,6 @@ function Testimonials() {
 // --- КОМПОНЕНТ: Team ---
 function Team() {
   const [hoveredIndex, setHoveredIndex] = useState<number>(0);
-  const containerRef = useRef(null);
-
-  const { scrollYProgress } = useScroll({ 
-    target: containerRef, 
-    offset: ["start center", "end center"] 
-  });
-  
-  // ОСЬ ТУТ ЗМІНЕНО КОЛІР: замість темного #2D3339 тепер м'який сірий #5C6B7A
-  const bgChange = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], ['#F4F6F8', '#5C6B7A', '#5C6B7A', '#F4F6F8']);
-  const textChange = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], ['#2D3339', '#F4F6F8', '#F4F6F8', '#2D3339']);
 
   const teamMembers = [
     { name: "Aarav Nair", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80" },
@@ -287,17 +278,31 @@ function Team() {
     { name: "Sofiia Hrytsenko", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&q=80" },
     { name: "Maksym Bondar", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80" },
     { name: "Jordan Bennett", image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=800&q=80" },
-    { name: "Mia Carter", image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80" }
+    { name: "Mia Carter", image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80" },
+    { name: "Lukas Meier", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80" },
+    { name: "Elena Vogel", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80" },
+    { name: "Carlos Rivera", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80" },
+    { name: "Anna Müller", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80" },
+    { name: "David Chen", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80" },
+    { name: "Sarah Jenkins", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&q=80" },
+    { name: "Yuki Tanaka", image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=800&q=80" },
+    { name: "Tom Newman", image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80" },
+    { name: "Nina Ricci", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80" },
   ];
 
   return (
-    <motion.section 
-      ref={containerRef} 
-      style={{ backgroundColor: bgChange, color: textChange }}
-      id="team" 
-      className="py-32 px-8 min-h-screen flex items-center overflow-hidden"
-    >
-      <div className="max-w-[90rem] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <section id="team" className="py-24 px-8 min-h-screen flex items-center relative overflow-hidden bg-background text-foreground">
+      
+      {/* РОЗМИТИЙ ЧЕРВОНИЙ/РОЖЕВИЙ ФОН (як у Hero) */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-end">
+        <motion.div 
+          animate={{ scale: [1, 1.3, 1], x: ['0%', '-20%', '10%', '0%'], y: ['0%', '20%', '-20%', '0%'] }} 
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }} 
+          className="w-[70vw] h-[70vw] bg-pink-400/30 rounded-full mix-blend-multiply filter blur-[100px] md:blur-[140px]" 
+        />
+      </div>
+
+      <div className="relative z-10 max-w-[90rem] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         
         {/* Ліва частина: Зона появи фотографій */}
         <div className="relative h-[400px] md:h-[600px] w-full flex items-center justify-center lg:justify-start">
@@ -312,35 +317,37 @@ function Team() {
                 scale: hoveredIndex === i ? 1 : 0.95,
                 zIndex: hoveredIndex === i ? 10 : 0
               }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="absolute max-w-[280px] md:max-w-[420px] aspect-[4/5] object-cover rounded-2xl shadow-2xl"
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="absolute max-w-[240px] md:max-w-[400px] aspect-[4/5] object-cover rounded-2xl shadow-2xl"
             />
           ))}
         </div>
 
         {/* Права частина: Список імен */}
         <div className="flex flex-col text-right items-end justify-center">
-          <h2 className="font-syne text-xl md:text-2xl text-mint mb-8 font-bold uppercase tracking-widest">
+          <h2 className="font-syne text-sm md:text-lg text-foreground/50 mb-6 font-bold uppercase tracking-widest">
             The Team
           </h2>
           
-          {teamMembers.map((member, i) => (
-            <div 
-              key={i}
-              onMouseEnter={() => setHoveredIndex(i)}
-              className={`cursor-pointer py-1 md:py-2 font-syne text-5xl md:text-7xl transition-all duration-500 ${
-                hoveredIndex === i 
-                  ? 'opacity-100 font-bold translate-x-0' 
-                  : 'opacity-20 font-medium translate-x-4 hover:opacity-50'
-              }`}
-            >
-              {member.name}
-            </div>
-          ))}
+          <div className="flex flex-col">
+            {teamMembers.map((member, i) => (
+              <div 
+                key={i}
+                onMouseEnter={() => setHoveredIndex(i)}
+                className={`cursor-pointer py-[2px] md:py-1 font-syne text-2xl md:text-4xl transition-all duration-300 ${
+                  hoveredIndex === i 
+                    ? 'opacity-100 font-bold translate-x-0' 
+                    : 'opacity-30 font-medium translate-x-3 hover:opacity-60'
+                }`}
+              >
+                {member.name}
+              </div>
+            ))}
+          </div>
         </div>
 
       </div>
-    </motion.section>
+    </section>
   );
 }
 
