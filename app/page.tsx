@@ -46,29 +46,39 @@ function Hero() {
 function About() {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end end"] });
+  
   const bgChange = useTransform(scrollYProgress, [0, 0.5, 1], ['#F4F6F8', '#2D3339', '#F4F6F8']);
   const textChange = useTransform(scrollYProgress, [0, 0.5, 1], ['#2D3339', '#F4F6F8', '#2D3339']);
-  const opacity1 = useTransform(scrollYProgress, [0, 0.2, 0.4], [1, 1, 0]);
-  const opacity2 = useTransform(scrollYProgress, [0.4, 0.5, 0.6], [0, 1, 0]);
-  const opacity3 = useTransform(scrollYProgress, [0.6, 0.8, 1], [0, 1, 1]);
+  
+  // Оновлені математичні діапазони, які гарантовано не перетинаються:
+  const opacity1 = useTransform(scrollYProgress, [0, 0.2, 0.3], [1, 1, 0]);
+  const opacity2 = useTransform(scrollYProgress, [0.35, 0.5, 0.65], [0, 1, 0]);
+  const opacity3 = useTransform(scrollYProgress, [0.7, 0.8, 1], [0, 1, 1]);
 
   return (
     <motion.section ref={containerRef} style={{ backgroundColor: bgChange, color: textChange }} className="relative h-[300vh] transition-colors duration-300">
       <div className="sticky top-0 h-screen flex flex-col justify-center items-center px-8 text-center max-w-5xl mx-auto overflow-hidden">
-        <motion.div style={{ opacity: opacity1 }} className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
+        
+        {/* Теза 1 (початково видима) */}
+        <motion.div initial={{ opacity: 1 }} style={{ opacity: opacity1 }} className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
           <h2 className="font-syne text-5xl md:text-7xl font-bold mb-6">The sum is greater than its parts.</h2>
           <p className="text-xl md:text-2xl max-w-3xl leading-relaxed">Synthesis was born inside Syngenta from one simple belief: the best digital work happens when the right people, ideas, and craft come together.</p>
         </motion.div>
-        <motion.div style={{ opacity: opacity2 }} className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
+
+        {/* Теза 2 (початково прихована) */}
+        <motion.div initial={{ opacity: 0 }} style={{ opacity: opacity2 }} className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
           <h2 className="font-syne text-5xl md:text-7xl font-bold mb-6 text-mint">Not an external vendor.</h2>
           <p className="text-xl md:text-2xl max-w-3xl leading-relaxed">Our superpower is combining a warm, human way of working with a premium standard of execution.</p>
         </motion.div>
-        <motion.div style={{ opacity: opacity3 }} className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
+
+        {/* Теза 3 (початково прихована) */}
+        <motion.div initial={{ opacity: 0 }} style={{ opacity: opacity3 }} className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
           <h3 className="font-syne text-3xl font-bold mb-8 text-cyan">What we believe</h3>
           <p className="text-2xl md:text-4xl font-syne max-w-4xl leading-snug">
             Good design is respect for someone's time. <br/> Simplicity is harder than complexity. <br/> And nothing great is ever built alone.
           </p>
         </motion.div>
+
       </div>
     </motion.section>
   );
