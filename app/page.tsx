@@ -24,11 +24,8 @@ function Header() {
 function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   
-  // Пружинна анімація для шлейфу (робимо її дуже м'якою, щоб "вода" тягнулась із затримкою)
   const mouseX = useSpring(0, { stiffness: 30, damping: 20 });
   const mouseY = useSpring(0, { stiffness: 30, damping: 20 });
-  
-  // Анімація прозорості: з'являється, коли курсор на екрані, і зникає, коли виходить за межі
   const trailOpacity = useSpring(0, { stiffness: 40, damping: 15 });
 
   const handleMouseMove = (e: any) => {
@@ -47,7 +44,7 @@ function Hero() {
       className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-background cursor-default"
     >
       
-      {/* Анімований фон з 4 кольорів (залишається) */}
+      {/* Анімований фон з 4 кольорів */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div animate={{ scale: [1, 1.4, 1], x: ['0%', '30%', '-10%', '0%'], y: ['0%', '-30%', '20%', '0%'] }} transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[-10%] left-[-10%] w-[45vw] h-[45vw] bg-pink-400/40 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[120px]" />
         <motion.div animate={{ scale: [1, 1.5, 1], x: ['0%', '-40%', '20%', '0%'], y: ['0%', '40%', '-20%', '0%'] }} transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute top-[10%] right-[-10%] w-[50vw] h-[50vw] bg-blue-400/40 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[120px]" />
@@ -64,7 +61,11 @@ function Hero() {
         }}
       />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center flex flex-col items-center pointer-events-none">
+      {/* ПЛАВНИЙ ПЕРЕХІД ВНИЗУ (ГРАДІЄНТ ФОНУ) */}
+      <div className="absolute bottom-0 left-0 w-full h-32 md:h-64 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
+
+      {/* Текст та кнопки */}
+      <div className="relative z-20 max-w-4xl mx-auto px-6 text-center flex flex-col items-center pointer-events-none">
         <motion.h1 
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} 
           className="font-syne text-6xl md:text-[7rem] font-extrabold tracking-tighter leading-[0.9] text-foreground mb-8"
@@ -79,7 +80,6 @@ function Hero() {
           We're Synthesis, Syngenta's in-house digital studio. We bring products, design, and markets together into landing pages, microsites, and campaigns that teams and clients genuinely love.
         </motion.p>
         
-        {/* Кнопкам повертаємо pointer-events-auto, щоб на них можна було клікати */}
         <motion.div 
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} 
           className="flex gap-4 pointer-events-auto"
@@ -269,20 +269,18 @@ function Testimonials() {
 }
 // --- КОМПОНЕНТ: Team ---
 function Team() {
-  // Зберігаємо індекс людини, на яку наведено курсор (за замовчуванням - перша людина)
   const [hoveredIndex, setHoveredIndex] = useState<number>(0);
   const containerRef = useRef(null);
 
-  // Плавна зміна фону при скролі (Світлий -> Темний -> Світлий)
   const { scrollYProgress } = useScroll({ 
     target: containerRef, 
     offset: ["start center", "end center"] 
   });
   
-  const bgChange = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], ['#F4F6F8', '#2D3339', '#2D3339', '#F4F6F8']);
+  // ОСЬ ТУТ ЗМІНЕНО КОЛІР: замість темного #2D3339 тепер м'який сірий #5C6B7A
+  const bgChange = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], ['#F4F6F8', '#5C6B7A', '#5C6B7A', '#F4F6F8']);
   const textChange = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], ['#2D3339', '#F4F6F8', '#F4F6F8', '#2D3339']);
 
-  // Масив команди з тимчасовими фотографіями
   const teamMembers = [
     { name: "Aarav Nair", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80" },
     { name: "Priya Menon", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80" },
@@ -320,7 +318,7 @@ function Team() {
           ))}
         </div>
 
-        {/* Права частина: Список імен (як на референсі) */}
+        {/* Права частина: Список імен */}
         <div className="flex flex-col text-right items-end justify-center">
           <h2 className="font-syne text-xl md:text-2xl text-mint mb-8 font-bold uppercase tracking-widest">
             The Team
