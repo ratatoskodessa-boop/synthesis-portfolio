@@ -83,7 +83,6 @@ function About() {
     </motion.section>
   );
 }
-
 // --- КОМПОНЕНТ: Showcases ---
 function Showcases() {
   const [hovered, setHovered] = useState<number | null>(null);
