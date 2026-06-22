@@ -23,19 +23,64 @@ function Header() {
 // --- КОМПОНЕНТ: Hero ---
 function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      <motion.div animate={{ scale: [1, 1.2, 1], x: [0, 50, -50, 0], y: [0, -50, 50, 0] }} transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }} className="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] bg-mint/40 rounded-full mix-blend-multiply filter blur-3xl opacity-70" />
-      <motion.div animate={{ scale: [1, 1.3, 1], x: [0, -60, 40, 0], y: [0, 60, -40, 0] }} transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }} className="absolute bottom-1/4 right-1/4 w-[35vw] h-[35vw] bg-cyan/40 rounded-full mix-blend-multiply filter blur-3xl opacity-70" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-background">
+      
+      {/* Анімований фон з 4 кольорів */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Рожевий */}
+        <motion.div 
+          animate={{ scale: [1, 1.4, 1], x: ['0%', '30%', '-10%', '0%'], y: ['0%', '-30%', '20%', '0%'] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[-10%] left-[-10%] w-[45vw] h-[45vw] bg-pink-400/40 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[120px]"
+        />
+        
+        {/* Синій */}
+        <motion.div 
+          animate={{ scale: [1, 1.5, 1], x: ['0%', '-40%', '20%', '0%'], y: ['0%', '40%', '-20%', '0%'] }}
+          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute top-[10%] right-[-10%] w-[50vw] h-[50vw] bg-blue-400/40 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[120px]"
+        />
+
+        {/* Жовтий */}
+        <motion.div 
+          animate={{ scale: [1, 1.3, 1], x: ['0%', '20%', '-30%', '0%'], y: ['0%', '30%', '-40%', '0%'] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute bottom-[-20%] left-[10%] w-[40vw] h-[40vw] bg-yellow-300/50 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[120px]"
+        />
+
+        {/* Зелений */}
+        <motion.div 
+          animate={{ scale: [1, 1.6, 1], x: ['0%', '-30%', '40%', '0%'], y: ['0%', '-20%', '30%', '0%'] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          className="absolute bottom-[0%] right-[10%] w-[45vw] h-[45vw] bg-emerald-400/40 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[120px]"
+        />
+      </div>
+
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center flex flex-col items-center">
-        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="font-syne text-6xl md:text-8xl font-extrabold tracking-tighter leading-tight text-foreground mb-6">
+        <motion.h1 
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} 
+          className="font-syne text-6xl md:text-[7rem] font-extrabold tracking-tighter leading-[0.9] text-foreground mb-8"
+        >
           Where ideas <br /> come together.
         </motion.h1>
-        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="text-lg md:text-xl text-foreground/80 max-w-2xl mb-10 leading-relaxed">
+        
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} 
+          className="text-lg md:text-xl text-foreground/80 max-w-2xl mb-12 leading-relaxed"
+        >
           We're Synthesis, Syngenta's in-house digital studio. We bring products, design, and markets together into landing pages, microsites, and campaigns that teams and clients genuinely love.
         </motion.p>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="flex gap-4">
-          <button className="px-8 py-4 rounded-full bg-foreground text-background font-medium hover:bg-mint transition-colors cursor-pointer">Start a project</button>
-          <button className="px-8 py-4 rounded-full border border-foreground/20 font-medium hover:border-amber transition-colors backdrop-blur-sm cursor-pointer">See our work</button>
+        
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} 
+          className="flex gap-4"
+        >
+          <button className="px-8 py-4 rounded-full bg-foreground text-background font-medium hover:scale-105 transition-transform cursor-pointer shadow-lg shadow-foreground/20">
+            Start a project
+          </button>
+          <button className="px-8 py-4 rounded-full border border-foreground/20 font-medium hover:bg-white/50 transition-colors backdrop-blur-md cursor-pointer">
+            See our work
+          </button>
         </motion.div>
       </div>
     </section>
