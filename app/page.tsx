@@ -194,6 +194,70 @@ function Showcases() {
     </section>
   );
 }
+// --- КОМПОНЕНТ: Testimonials ---
+function Testimonials() {
+  const quotes = [
+    {
+      quote: "Synthesis feels less like an internal team and more like a top-tier agency.",
+      name: "Anna Müller",
+      role: "Global Marketing Lead",
+      project: "Hyvido Campaign"
+    },
+    {
+      quote: "They understand our brand natively, which saves us weeks of onboarding and revisions.",
+      name: "Carlos Rivera",
+      role: "Product Manager",
+      project: "Vaniva Hub"
+    },
+    {
+      quote: "The attention to detail and human approach makes every project a breeze.",
+      name: "Sarah Jenkins",
+      role: "UX Director",
+      project: "Vev Design System"
+    },
+    {
+      quote: "From brief to launch, the process was seamless and the visual results exceeded expectations.",
+      name: "David Chen",
+      role: "Commercial Head",
+      project: "Incipio Launch"
+    }
+  ];
+
+  return (
+    <section className="py-32 bg-background overflow-hidden">
+      <div className="max-w-[90rem] mx-auto px-8 mb-16">
+        <h2 className="font-syne text-5xl md:text-7xl font-bold mb-4">What they say.</h2>
+      </div>
+
+      <div className="relative flex whitespace-nowrap">
+        {/* Анімація нескінченної прокрутки */}
+        <motion.div 
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ repeat: Infinity, ease: "linear", duration: 40 }}
+          className="flex gap-8 px-4"
+        >
+          {/* Подвоюємо масив для безшовного циклу */}
+          {[...quotes, ...quotes].map((item, i) => (
+            <div 
+              key={i} 
+              className="flex flex-col justify-between w-[85vw] md:w-[45vw] lg:w-[35vw] whitespace-normal bg-white/40 backdrop-blur-xl p-10 md:p-14 rounded-[2rem] border border-white/60 shadow-xl hover:-translate-y-2 transition-transform duration-300"
+            >
+              <p className="font-syne text-2xl md:text-3xl font-medium leading-snug mb-12 text-foreground">
+                "{item.quote}"
+              </p>
+              <div>
+                <p className="font-bold text-foreground text-xl">{item.name}</p>
+                <p className="text-foreground/50 text-sm font-bold tracking-widest uppercase mt-2">
+                  {item.role} <span className="text-mint mx-1">•</span> {item.project}
+                </p>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
 // --- КОМПОНЕНТ: Team ---
 function Team() {
   // Зберігаємо індекс людини, на яку наведено курсор (за замовчуванням - перша людина)
