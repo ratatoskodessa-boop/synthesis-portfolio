@@ -94,7 +94,9 @@ function Showcases() {
     { name: 'Baloric', desc: 'A product launch page built from scratch. [+45% time on page]', color: 'bg-mint' },
     { name: 'Vaniva', desc: 'A product hub that became a template. [12 markets]', color: 'bg-cyan' },
     { name: 'Vixeran', desc: 'An interactive microsite with character. [+30% engagement]', color: 'bg-amber' },
-    { name: 'DDG Hyvido', desc: 'A campaign page for hybrid barley. [+25% in leads]', color: 'bg-mint' }
+    { name: 'DDG Hyvido', desc: 'A campaign page for hybrid barley. [+25% in leads]', color: 'bg-mint' },
+    { name: 'Incipio', desc: 'A launch that looks like a million. [8% CTR]', color: 'bg-cyan' },
+    { name: 'Simodis', desc: 'A demo you want to keep exploring. [+60% scroll depth]', color: 'bg-amber' }
   ];
 
   useEffect(() => {
@@ -104,25 +106,49 @@ function Showcases() {
   }, [mouseX, mouseY]);
 
   return (
-    <section id="work" className="py-32 px-8 relative max-w-7xl mx-auto">
-      <h2 className="font-syne text-5xl md:text-6xl font-bold mb-16 border-b border-foreground/10 pb-8">Work we're proud of.</h2>
-      <div className="relative">
+    <section id="work" className="py-32 px-8 relative max-w-[90rem] mx-auto">
+      <h2 className="font-syne text-5xl md:text-7xl font-bold mb-20 border-b border-foreground/10 pb-8">Work we're proud of.</h2>
+      
+      <div className="relative flex flex-col w-full">
         {projects.map((proj, i) => (
-          <div key={i} onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(null)} className="group flex flex-col md:flex-row md:items-center justify-between py-8 border-b border-foreground/10 cursor-pointer">
-            <h3 className="font-syne text-4xl md:text-5xl font-medium transition-transform group-hover:translate-x-4">{proj.name}</h3>
-            <p className="text-foreground/60 text-lg md:text-xl font-medium mt-2 md:mt-0">{proj.desc}</p>
+          <div 
+            key={i} 
+            onMouseEnter={() => setHovered(i)} 
+            onMouseLeave={() => setHovered(null)} 
+            // Збільшені відступи (py-12 замість py-8) та доданий gap для кращого простору
+            className="group flex flex-col xl:flex-row xl:items-center justify-between py-12 border-b border-foreground/10 cursor-pointer gap-6 xl:gap-12 w-full"
+          >
+            {/* Збільшений шрифт назви та сильніший зсув при ховері */}
+            <h3 className="font-syne text-5xl md:text-6xl font-medium transition-transform duration-300 group-hover:translate-x-8">
+              {proj.name}
+            </h3>
+            {/* Збільшений шрифт опису та вирівнювання по правому краю на великих екранах */}
+            <p className="text-foreground/60 text-xl md:text-2xl font-medium xl:text-right max-w-2xl">
+              {proj.desc}
+            </p>
           </div>
         ))}
       </div>
-      <motion.div style={{ x: mouseX, y: mouseY, translateX: '-50%', translateY: '-50%' }} className="fixed top-0 left-0 pointer-events-none z-50 hidden md:block">
-        <motion.div animate={{ opacity: hovered !== null ? 1 : 0, scale: hovered !== null ? 1 : 0.8 }} className={`w-72 h-48 rounded-2xl backdrop-blur-xl bg-white/40 border border-white/50 shadow-2xl flex items-center justify-center overflow-hidden ${hovered !== null ? projects[hovered].color : 'bg-transparent'}`}>
-          <span className="font-syne font-bold text-background text-2xl mix-blend-exclusion">{hovered !== null ? projects[hovered].name : ''}</span>
+
+      {/* Оновлена, значно більша картка при ховері */}
+      <motion.div 
+        style={{ x: mouseX, y: mouseY, translateX: '-50%', translateY: '-50%' }} 
+        className="fixed top-0 left-0 pointer-events-none z-50 hidden md:block"
+      >
+        <motion.div 
+          animate={{ opacity: hovered !== null ? 1 : 0, scale: hovered !== null ? 1 : 0.8 }} 
+          // Збільшені розміри (w-[32rem] h-[22rem]) та округлення (rounded-3xl)
+          className={`w-[32rem] h-[22rem] rounded-3xl backdrop-blur-2xl bg-white/30 border border-white/50 shadow-2xl flex items-center justify-center overflow-hidden transition-colors duration-300 ${hovered !== null ? projects[hovered].color : 'bg-transparent'}`}
+        >
+          {/* Збільшений текст всередині картки */}
+          <span className="font-syne font-bold text-background text-5xl mix-blend-exclusion">
+            {hovered !== null ? projects[hovered].name : ''}
+          </span>
         </motion.div>
       </motion.div>
     </section>
   );
 }
-
 // --- КОМПОНЕНТ: Team ---
 function Team() {
   const team = ["Aarav Nair", "Priya Menon", "Sofiia Hrytsenko", "Maksym Bondar", "Jordan Bennett", "Mia Carter"];
