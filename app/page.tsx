@@ -365,6 +365,7 @@ export default function Home() {
       <Hero />
       <About />
       <Showcases />
+      <Testimonials /> {/* <--- Додали сюди */}
       <Team />
       <CTAAndFooter />
     </main>
