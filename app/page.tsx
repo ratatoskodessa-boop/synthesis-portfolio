@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionTemplate } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 
 // --- КОМПОНЕНТ: Header ---
@@ -339,14 +339,54 @@ function Team() {
 
 // --- КОМПОНЕНТ: CTA & Footer ---
 function CTAAndFooter() {
+  const btnRef = useRef<HTMLButtonElement>(null);
+  
+  // Пружинна анімація створює ефект в'язкості (води), яка злегка "відстає" від курсора
+  const mouseX = useSpring(0, { stiffness: 40, damping: 15 });
+  const mouseY = useSpring(0, { stiffness: 40, damping: 15 });
+
+  const handleMouseMove = (e: any) => {
+    if (!btnRef.current) return;
+    const rect = btnRef.current.getBoundingClientRect();
+    // Вираховуємо позицію курсора відносно самої кнопки
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
+  };
+
   return (
     <>
       <section id="contacts" className="py-32 px-8 flex flex-col items-center justify-center text-center">
         <h2 className="font-syne text-5xl md:text-7xl font-bold mb-6">Got an idea? <br/> Let's bring it together.</h2>
-        <motion.button whileHover="hover" variants={{ hover: { borderRadius: ["20%", "40% 60% 70% 30%", "30% 70% 50% 50%", "50%"] } }} transition={{ duration: 1, repeat: Infinity, repeatType: "mirror" }} style={{ borderRadius: "50rem" }} className="relative mt-12 group px-12 py-8 bg-mint text-foreground font-syne font-bold text-2xl cursor-pointer">
-          <span className="relative z-10 group-hover:scale-110 transition-transform inline-block">Start a project</span>
+        
+        <motion.button 
+          ref={btnRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={() => {
+            // Коли курсор йде, плавно повертаємо "воду" в центр кнопки
+            if(btnRef.current){
+              mouseX.set(btnRef.current.offsetWidth / 2);
+              mouseY.set(btnRef.current.offsetHeight / 2);
+            }
+          }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="relative mt-12 overflow-hidden px-16 py-8 rounded-full bg-mint text-foreground font-syne font-bold text-2xl cursor-pointer shadow-lg transition-shadow hover:shadow-mint/50 group"
+        >
+          {/* "Водяний" відблиск, що рухається за курсором */}
+          <motion.div 
+            className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-screen"
+            style={{
+              background: useMotionTemplate`radial-gradient(120px circle at ${mouseX}px ${mouseY}px, rgba(255, 255, 255, 0.9), transparent 100%)`,
+            }}
+          />
+          <span className="relative z-10 pointer-events-none text-foreground">Start a project</span>
         </motion.button>
+
+        <p className="mt-12 text-foreground/60 font-medium text-lg">
+          Or just message us, <a href="#" className="underline decoration-amber hover:text-amber transition-colors">let's chat.</a>
+        </p>
       </section>
+      
       <footer className="bg-background pt-24 pb-8 px-8 border-t border-foreground/10">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-sm font-medium text-foreground/50 group">
           <p className="group-hover:text-foreground transition-colors duration-500">Synthesis, part of Syngenta GDM.</p>
