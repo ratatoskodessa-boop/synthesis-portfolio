@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll, useTransform, useSpring, useMotionTemplate } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionTemplate, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 
 // --- КОМПОНЕНТ: Header ---
@@ -20,8 +20,10 @@ function Header() {
   );
 }
 
-import { useState, useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
+'use client';
+
+import { motion, useScroll, useTransform, useSpring, useMotionTemplate, AnimatePresence } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
 
 // --- КОМПОНЕНТ: Preloader (Seed to System) ---
 function Preloader() {
