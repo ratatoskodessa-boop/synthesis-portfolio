@@ -20,13 +20,76 @@ function Header() {
   );
 }
 
-// --- КОМПОНЕНТ: Hero ---
+import { useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
+
+// --- КОМПОНЕНТ: Preloader (Seed to System) ---
+function Preloader() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Прелоадер зникає через 3.5 секунди
+    const timer = setTimeout(() => setIsLoading(false), 3500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {isLoading && (
+        <motion.div
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-background overflow-hidden"
+        >
+          <div className="relative flex items-center justify-center w-64 h-64">
+            
+            {/* Етап 1: Органічна форма (Насіння / Крапля) */}
+            <motion.div
+              initial={{ scale: 0, borderRadius: "50%", opacity: 1 }}
+              animate={{ 
+                scale: [0, 1, 1.2, 0], 
+                borderRadius: ["50%", "40% 60% 70% 30%", "30% 70% 50% 50%", "10%"] 
+              }}
+              transition={{ duration: 1.5, ease: "easeInOut", times: [0, 0.4, 0.8, 1] }}
+              className="absolute w-32 h-32 bg-mint/80 backdrop-blur-md"
+            />
+
+            {/* Етап 2: Наукова структура (Сітка / Вузли) */}
+            <motion.div
+              initial={{ scale: 0, opacity: 0, rotate: -45 }}
+              animate={{ scale: [0, 1.5, 0], opacity: [0, 1, 0], rotate: 0 }}
+              transition={{ duration: 1.2, delay: 1.2, ease: "easeInOut" }}
+              className="absolute inset-0 grid grid-cols-3 gap-2 p-8"
+            >
+              {[...Array(9)].map((_, i) => (
+                <div key={i} className="w-full h-full bg-cyan/60 rounded-sm" />
+              ))}
+            </motion.div>
+
+            {/* Етап 3: Синтез (Поява логотипу) */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
+              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              transition={{ duration: 0.8, delay: 2.2, ease: "easeOut" }}
+              className="absolute font-syne text-4xl font-bold tracking-tight text-foreground"
+            >
+              Synthesis
+            </motion.div>
+            
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+// --- КОМПОНЕНТ: Hero (Discovery Lens Effect) ---
 function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   
-  const mouseX = useSpring(0, { stiffness: 30, damping: 20 });
-  const mouseY = useSpring(0, { stiffness: 30, damping: 20 });
-  const trailOpacity = useSpring(0, { stiffness: 40, damping: 15 });
+  // Пружинна анімація для лінзи
+  const mouseX = useSpring(0, { stiffness: 40, damping: 20 });
+  const mouseY = useSpring(0, { stiffness: 40, damping: 20 });
+  const lensOpacity = useSpring(0, { stiffness: 40, damping: 15 });
 
   const handleMouseMove = (e: any) => {
     if (!sectionRef.current) return;
@@ -39,63 +102,62 @@ function Hero() {
     <section 
       ref={sectionRef}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => trailOpacity.set(1)}
-      onMouseLeave={() => trailOpacity.set(0)}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-background cursor-default"
+      onMouseEnter={() => lensOpacity.set(1)}
+      onMouseLeave={() => lensOpacity.set(0)}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-background cursor-crosshair"
     >
       
-      {/* Анімований фон з 4 кольорів */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div animate={{ scale: [1, 1.4, 1], x: ['0%', '30%', '-10%', '0%'], y: ['0%', '-30%', '20%', '0%'] }} transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[-10%] left-[-10%] w-[45vw] h-[45vw] bg-pink-400/40 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[120px]" />
-        <motion.div animate={{ scale: [1, 1.5, 1], x: ['0%', '-40%', '20%', '0%'], y: ['0%', '40%', '-20%', '0%'] }} transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute top-[10%] right-[-10%] w-[50vw] h-[50vw] bg-blue-400/40 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[120px]" />
-        <motion.div animate={{ scale: [1, 1.3, 1], x: ['0%', '20%', '-30%', '0%'], y: ['0%', '30%', '-40%', '0%'] }} transition={{ duration: 25, repeat: Infinity, ease: "easeInOut", delay: 2 }} className="absolute bottom-[-20%] left-[10%] w-[40vw] h-[40vw] bg-yellow-300/50 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[120px]" />
-        <motion.div animate={{ scale: [1, 1.6, 1], x: ['0%', '-30%', '40%', '0%'], y: ['0%', '-20%', '30%', '0%'] }} transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} className="absolute bottom-[0%] right-[10%] w-[45vw] h-[45vw] bg-emerald-400/40 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[120px]" />
+      {/* 1. БАЗОВИЙ ШАР (Чистий та людяний) */}
+      <div className="absolute inset-0 z-0">
+        <motion.div animate={{ scale: [1, 1.4, 1], x: ['0%', '20%', '0%'] }} transition={{ duration: 20, repeat: Infinity }} className="absolute top-0 left-0 w-[40vw] h-[40vw] bg-pink-300/30 rounded-full mix-blend-multiply blur-[100px]" />
+        <motion.div animate={{ scale: [1, 1.5, 1], x: ['0%', '-20%', '0%'] }} transition={{ duration: 25, repeat: Infinity }} className="absolute bottom-0 right-0 w-[45vw] h-[45vw] bg-emerald-300/30 rounded-full mix-blend-multiply blur-[100px]" />
       </div>
 
-      {/* МАГІЧНИЙ ШЛЕЙФ ВІД КУРСОРА */}
-      <motion.div 
-        className="absolute inset-0 z-0 pointer-events-none mix-blend-overlay"
-        style={{
-          opacity: trailOpacity,
-          background: useMotionTemplate`radial-gradient(600px circle at ${mouseX}px ${mouseY}px, rgba(255, 255, 255, 0.6), transparent 100%)`,
-        }}
-      />
-
-      {/* ПЛАВНИЙ ПЕРЕХІД ВНИЗУ (ГРАДІЄНТ ФОНУ) */}
-      <div className="absolute bottom-0 left-0 w-full h-32 md:h-64 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
-
-      {/* Текст та кнопки */}
-      <div className="relative z-20 max-w-4xl mx-auto px-6 text-center flex flex-col items-center pointer-events-none">
-        <motion.h1 
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} 
-          className="font-syne text-6xl md:text-[7rem] font-extrabold tracking-tighter leading-[0.9] text-foreground mb-8"
-        >
+      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center flex flex-col items-center">
+        <h1 className="font-syne text-6xl md:text-[7rem] font-extrabold tracking-tighter leading-[0.9] text-foreground mb-8">
           Where ideas <br /> come together.
-        </motion.h1>
-        
-        <motion.p 
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} 
-          className="text-lg md:text-xl text-foreground/80 max-w-2xl mb-12 leading-relaxed"
-        >
+        </h1>
+        <p className="text-lg md:text-xl text-foreground/80 max-w-2xl mb-12">
           We're Synthesis, Syngenta's in-house digital studio. We bring products, design, and markets together into landing pages, microsites, and campaigns that teams and clients genuinely love.
-        </motion.p>
-        
-        <motion.div 
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} 
-          className="flex gap-4 pointer-events-auto"
-        >
-          <button className="px-8 py-4 rounded-full bg-foreground text-background font-medium hover:scale-105 transition-transform cursor-pointer shadow-lg shadow-foreground/20">
-            Start a project
-          </button>
-          <button className="px-8 py-4 rounded-full border border-foreground/20 font-medium hover:bg-white/50 transition-colors backdrop-blur-md cursor-pointer">
-            See our work
-          </button>
-        </motion.div>
+        </p>
       </div>
+
+      {/* 2. НАУКОВИЙ ШАР (Прихований маскою, видимий через лінзу) */}
+      <motion.div 
+        className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center bg-[#1A1F24]"
+        style={{
+          opacity: lensOpacity,
+          WebkitMaskImage: useMotionTemplate`radial-gradient(180px circle at ${mouseX}px ${mouseY}px, black 0%, transparent 100%)`,
+          maskImage: useMotionTemplate`radial-gradient(180px circle at ${mouseX}px ${mouseY}px, black 0%, transparent 100%)`,
+        }}
+      >
+        {/* Науковий бекграунд: CSS-сітка (можна замінити на SVG топографії) */}
+        <div className="absolute inset-0 opacity-20" 
+             style={{ backgroundImage: 'linear-gradient(#A3D5B9 1px, transparent 1px), linear-gradient(90deg, #A3D5B9 1px, transparent 1px)', backgroundSize: '40px 40px' }} 
+        />
+        
+        {/* Дублюємо контент, але в технологічному стилі */}
+        <div className="relative max-w-4xl mx-auto px-6 text-center flex flex-col items-center">
+          <h1 className="font-syne text-6xl md:text-[7rem] font-extrabold tracking-tighter leading-[0.9] text-mint mb-8 uppercase" style={{ WebkitTextStroke: '1px #A3D5B9', color: 'transparent' }}>
+            Where ideas <br /> come together.
+          </h1>
+          <p className="text-lg md:text-xl text-mint/80 max-w-2xl mb-12 font-mono text-sm uppercase tracking-widest">
+            [ DATA_NODE: SYNTHESIS_STUDIO ] <br/>
+            AGGREGATING PRODUCTS, DESIGN, AND MARKETS. <br/>
+            STATUS: ACTIVE.
+          </p>
+        </div>
+      </motion.div>
+
+      {/* Кнопки поверх усього */}
+      <div className="absolute bottom-20 z-30 flex gap-4 pointer-events-auto">
+        <button className="px-8 py-4 rounded-full bg-foreground text-background font-medium hover:scale-105 transition-transform shadow-lg">Start a project</button>
+        <button className="px-8 py-4 rounded-full border border-foreground/20 font-medium hover:bg-white/50 backdrop-blur-md transition-colors">See our work</button>
+      </div>
+
     </section>
   );
 }
-
 // --- КОМПОНЕНТ: About ---
 function About() {
   const containerRef = useRef(null);
@@ -418,10 +480,7 @@ export default function Home() {
       <Header />
       <Hero />
       <About />
-      <Showcases />
-      <Testimonials /> {/* <--- Додали сюди */}
-      <Team />
-      <CTAAndFooter />
+      {/* і так далі */}
     </main>
   );
 }
