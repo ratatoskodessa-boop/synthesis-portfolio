@@ -20,11 +20,6 @@ function Header() {
   );
 }
 
-'use client';
-
-import { motion, useScroll, useTransform, useSpring, useMotionTemplate, AnimatePresence } from 'framer-motion';
-import { useState, useRef, useEffect } from 'react';
-
 // --- КОМПОНЕНТ: Preloader (Seed to System) ---
 function Preloader() {
   const [isLoading, setIsLoading] = useState(true);
