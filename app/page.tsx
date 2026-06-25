@@ -149,21 +149,22 @@ function AboutFarmers() {
   );
 }
 
-// --- 3. GALLERY ARCH (Світлий фон, агро-фото) ---
+// --- 3. GALLERY ARCH (Світлий фон, Інтерфейси та Брендинг) ---
 function CurvedGallery() {
   const targetRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: targetRef });
   const x = useTransform(scrollYProgress, [0, 1], ["0%", "-60%"]);
 
+  // Фотографії інтерфейсів, дашбордів та брендингу
   const images = [
-    "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=800&q=80",
-    "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80",
-    "https://images.unsplash.com/photo-1560493676-04071c5f467b?w=800&q=80",
-    "https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=800&q=80",
-    "https://images.unsplash.com/photo-1592982537447-6f23342a27b3?w=800&q=80",
-    "https://images.unsplash.com/photo-1586771107445-d3afeb0dc151?w=800&q=80",
-    "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=800&q=80",
-    "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80"
+    "https://images.unsplash.com/photo-1618761714954-0b8cd0026356?w=800&q=80", // Dashboard
+    "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80", // Branding/Colors
+    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80", // Data Dashboard
+    "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?w=800&q=80", // Mobile UI
+    "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&q=80", // Minimalist Poster
+    "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&q=80", // Web Design
+    "https://images.unsplash.com/photo-1618761714954-0b8cd0026356?w=800&q=80", // Dashboard 2
+    "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80"  // Branding 2
   ];
 
   const getCurveOffset = (index: number) => {
@@ -176,21 +177,23 @@ function CurvedGallery() {
     <section id="work" ref={targetRef} className="relative h-[300vh] bg-[#F4F6F8] text-[#1A1F24]">
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
         
-        <h2 className="font-syne text-5xl md:text-7xl font-bold mb-10 absolute top-32">Our Work</h2>
+        {/* Відступлено вище, щоб не було накладання */}
+        <h2 className="font-syne text-5xl md:text-7xl font-bold absolute top-20 md:top-24 z-10">Our Work</h2>
         
-        <motion.div style={{ x }} className="flex gap-8 px-[50vw]">
+        {/* Додано pt-48 для створення безпечної зони між текстом і дугою */}
+        <motion.div style={{ x }} className="flex gap-8 px-[50vw] pt-48 md:pt-56">
           {images.map((src, index) => (
             <div 
               key={index}
               style={{ marginTop: `${getCurveOffset(index)}px` }}
               className="min-w-[300px] md:min-w-[450px] aspect-[4/3] bg-gray-200 rounded-3xl overflow-hidden flex-shrink-0 shadow-xl transition-transform hover:scale-105 cursor-pointer"
             >
-              <img src={src} alt="Agro Project" className="w-full h-full object-cover" />
+              <img src={src} alt="Project Interface" className="w-full h-full object-cover" />
             </div>
           ))}
         </motion.div>
 
-        <div className="absolute bottom-24">
+        <div className="absolute bottom-20">
           <button className="px-10 py-5 bg-[#1A1F24] text-white rounded-full font-medium hover:bg-gray-800 transition-colors shadow-lg cursor-pointer">
             See all our work
           </button>
@@ -200,35 +203,68 @@ function CurvedGallery() {
   );
 }
 
-// --- 4. SERVICES (Із кнопкою) ---
+// --- 4. SERVICES (Із плаваючою прев'юшкою) ---
 function Services() {
+  const [hovered, setHovered] = useState<number | null>(null);
+  const mouseX = useSpring(0, { stiffness: 150, damping: 20 });
+  const mouseY = useSpring(0, { stiffness: 150, damping: 20 });
+
+  // Трекінг курсора для плаваючої картинки
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => { 
+      mouseX.set(e.clientX); 
+      mouseY.set(e.clientY); 
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
   const services = [
-    { title: "UI/UX Design", desc: "Creating intuitive and user-centered interfaces for complex agricultural platforms." },
-    { title: "Web Development", desc: "Building scalable, fast, and secure websites and web applications." },
-    { title: "Video Production", desc: "Telling your brand's story through high-quality video content." },
-    { title: "Branding", desc: "Crafting memorable identities that resonate with your target audience." }
+    { title: "UI/UX Design", desc: "Creating intuitive and user-centered interfaces for complex agricultural platforms.", img: "https://images.unsplash.com/photo-1618761714954-0b8cd0026356?w=600&q=80" },
+    { title: "Web Development", desc: "Building scalable, fast, and secure websites and web applications.", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&q=80" },
+    { title: "Video Production", desc: "Telling your brand's story through high-quality video content.", img: "https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?w=600&q=80" },
+    { title: "Branding", desc: "Crafting memorable identities that resonate with your target audience.", img: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80" }
   ];
 
   return (
-    <section id="services" className="py-32 bg-white">
+    <section id="services" className="py-32 bg-white relative">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="font-syne text-5xl md:text-7xl font-bold mb-16 text-[#1A1F24]">Our Services</h2>
-        <div className="flex flex-col border-t border-gray-200">
+        <div className="flex flex-col border-t border-gray-200" onMouseLeave={() => setHovered(null)}>
           {services.map((service, i) => (
-            <a key={i} href={`#service-${i}`} className="group flex flex-col md:flex-row md:items-center justify-between py-12 border-b border-gray-200 hover:bg-gray-50 transition-colors px-6 -mx-6 rounded-2xl">
-              <h3 className="font-syne text-3xl md:text-5xl font-medium text-[#1A1F24] group-hover:translate-x-4 transition-transform">{service.title}</h3>
-              <p className="mt-4 md:mt-0 text-gray-500 text-lg max-w-sm md:text-right">{service.desc}</p>
+            <a 
+              key={i} 
+              href={`#service-${i}`} 
+              onMouseEnter={() => setHovered(i)}
+              className="group flex flex-col md:flex-row md:items-center justify-between py-12 border-b border-gray-200 hover:bg-gray-50 transition-colors px-6 -mx-6 rounded-2xl"
+            >
+              <h3 className="font-syne text-3xl md:text-5xl font-medium text-[#1A1F24] group-hover:translate-x-4 transition-transform z-10">{service.title}</h3>
+              <p className="mt-4 md:mt-0 text-gray-500 text-lg max-w-sm md:text-right z-10">{service.desc}</p>
             </a>
           ))}
         </div>
         
-        {/* Кнопка "Всі сервіси" */}
-        <div className="mt-16 text-center">
+        <div className="mt-16 text-center relative z-10">
           <button className="px-10 py-5 rounded-full border border-gray-300 text-[#1A1F24] font-medium hover:bg-gray-50 transition-colors cursor-pointer">
             View all services
           </button>
         </div>
       </div>
+
+      {/* Плаваюча прев'юшка (видна тільки на десктопі) */}
+      <motion.div 
+        style={{ x: mouseX, y: mouseY, translateX: '-50%', translateY: '-50%' }} 
+        className="fixed top-0 left-0 pointer-events-none z-50 hidden md:block"
+      >
+        <motion.div 
+          animate={{ opacity: hovered !== null ? 1 : 0, scale: hovered !== null ? 1 : 0.8 }} 
+          className="w-72 h-48 rounded-2xl overflow-hidden shadow-2xl bg-gray-100"
+        >
+          {hovered !== null && (
+            <img src={services[hovered].img} alt="Service Preview" className="w-full h-full object-cover" />
+          )}
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
@@ -359,7 +395,6 @@ function ContactForm() {
             </div>
 
             <div className="flex pt-6">
-              {/* Стилізована кнопка, яка підходить під весь сайт */}
               <button type="button" className="px-10 py-5 rounded-full bg-[#A3D5B9] text-[#1A1F24] font-bold tracking-widest uppercase hover:bg-[#8ec2a3] transition-colors cursor-pointer shadow-lg">
                 Send Request
               </button>
@@ -367,10 +402,14 @@ function ContactForm() {
           </form>
         </div>
 
-        {/* Right Side: Image & Info */}
+        {/* Right Side: Friendly Farmer Image & Info */}
         <div className="w-full lg:w-1/2 p-4 flex flex-col">
           <div className="flex-1 rounded-[1.5rem] overflow-hidden bg-gray-100 relative min-h-[400px]">
-            <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&q=80" alt="Abstract Greens" className="absolute inset-0 w-full h-full object-cover" />
+            <img 
+              src="https://images.unsplash.com/photo-1560493676-04071c5f467b?w=800&q=80" 
+              alt="Friendly farmer with tablet" 
+              className="absolute inset-0 w-full h-full object-cover" 
+            />
           </div>
           <div className="mt-4 bg-white border border-gray-100 rounded-[1.5rem] p-8 flex flex-col gap-6">
             <div className="flex justify-between items-start border-b border-gray-100 pb-6">
