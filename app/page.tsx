@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useScroll, useTransform, useSpring, useMotionTemplate } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 // --- 0. HEADER ---
 function Header() {
@@ -20,7 +20,7 @@ function Header() {
   );
 }
 
-// --- 1. HERO SECTION (Зі шлейфом) ---
+// --- 1. HERO SECTION ---
 function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const mouseX = useSpring(0, { stiffness: 30, damping: 20 });
@@ -42,7 +42,6 @@ function Hero() {
       onMouseLeave={() => trailOpacity.set(0)}
       className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-[#F4F6F8] cursor-default"
     >
-      {/* Анімований фон з 4 кольорів */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div animate={{ scale: [1, 1.4, 1], x: ['0%', '30%', '-10%', '0%'], y: ['0%', '-30%', '20%', '0%'] }} transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[-10%] left-[-10%] w-[45vw] h-[45vw] bg-pink-300/40 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[120px]" />
         <motion.div animate={{ scale: [1, 1.5, 1], x: ['0%', '-40%', '20%', '0%'], y: ['0%', '40%', '-20%', '0%'] }} transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute top-[10%] right-[-10%] w-[50vw] h-[50vw] bg-blue-300/40 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[120px]" />
@@ -50,7 +49,6 @@ function Hero() {
         <motion.div animate={{ scale: [1, 1.6, 1], x: ['0%', '-30%', '40%', '0%'], y: ['0%', '-20%', '30%', '0%'] }} transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} className="absolute bottom-[0%] right-[10%] w-[45vw] h-[45vw] bg-emerald-300/40 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[120px]" />
       </div>
 
-      {/* ШЛЕЙФ ВІД КУРСОРА */}
       <motion.div 
         className="absolute inset-0 z-0 pointer-events-none mix-blend-overlay"
         style={{
@@ -59,7 +57,6 @@ function Hero() {
         }}
       />
 
-      {/* Градієнт для плавного переходу вниз */}
       <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none" />
 
       <div className="relative z-10 text-center px-6 pointer-events-none">
@@ -86,7 +83,7 @@ function Hero() {
   );
 }
 
-// --- 2. ABOUT: FARMERS PARALLAX (Із текстом та портретами) ---
+// --- 2. ABOUT: FARMERS PARALLAX ---
 function AboutFarmers() {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start end", "end start"] });
@@ -94,7 +91,6 @@ function AboutFarmers() {
   const yUp = useTransform(scrollYProgress, [0, 1], [150, -400]);
   const yDown = useTransform(scrollYProgress, [0, 1], [-400, 150]);
 
-  // Мікс фотографій та дружніх слоганів
   const items = [
     { type: 'img', content: 'https://images.unsplash.com/photo-1592982537447-6f23342a27b3?w=600&q=80' },
     { type: 'text', content: 'Hands in the dirt.' },
@@ -149,22 +145,21 @@ function AboutFarmers() {
   );
 }
 
-// --- 3. GALLERY ARCH (Світлий фон, Інтерфейси та Брендинг) ---
+// --- 3. GALLERY ARCH (З відступом та інтерфейсами) ---
 function CurvedGallery() {
   const targetRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: targetRef });
   const x = useTransform(scrollYProgress, [0, 1], ["0%", "-60%"]);
 
-  // Фотографії інтерфейсів, дашбордів та брендингу
   const images = [
-    "https://images.unsplash.com/photo-1618761714954-0b8cd0026356?w=800&q=80", // Dashboard
-    "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80", // Branding/Colors
-    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80", // Data Dashboard
-    "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?w=800&q=80", // Mobile UI
-    "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&q=80", // Minimalist Poster
-    "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&q=80", // Web Design
-    "https://images.unsplash.com/photo-1618761714954-0b8cd0026356?w=800&q=80", // Dashboard 2
-    "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80"  // Branding 2
+    "https://images.unsplash.com/photo-1618761714954-0b8cd0026356?w=800&q=80",
+    "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80",
+    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+    "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?w=800&q=80",
+    "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&q=80",
+    "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&q=80",
+    "https://images.unsplash.com/photo-1618761714954-0b8cd0026356?w=800&q=80",
+    "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80" 
   ];
 
   const getCurveOffset = (index: number) => {
@@ -177,10 +172,8 @@ function CurvedGallery() {
     <section id="work" ref={targetRef} className="relative h-[300vh] bg-[#F4F6F8] text-[#1A1F24]">
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
         
-        {/* Відступлено вище, щоб не було накладання */}
         <h2 className="font-syne text-5xl md:text-7xl font-bold absolute top-20 md:top-24 z-10">Our Work</h2>
         
-        {/* Додано pt-48 для створення безпечної зони між текстом і дугою */}
         <motion.div style={{ x }} className="flex gap-8 px-[50vw] pt-48 md:pt-56">
           {images.map((src, index) => (
             <div 
@@ -203,13 +196,12 @@ function CurvedGallery() {
   );
 }
 
-// --- 4. SERVICES (Із плаваючою прев'юшкою) ---
+// --- 4. SERVICES (З плаваючою прев'юшкою) ---
 function Services() {
   const [hovered, setHovered] = useState<number | null>(null);
   const mouseX = useSpring(0, { stiffness: 150, damping: 20 });
   const mouseY = useSpring(0, { stiffness: 150, damping: 20 });
 
-  // Трекінг курсора для плаваючої картинки
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => { 
       mouseX.set(e.clientX); 
@@ -251,7 +243,6 @@ function Services() {
         </div>
       </div>
 
-      {/* Плаваюча прев'юшка (видна тільки на десктопі) */}
       <motion.div 
         style={{ x: mouseX, y: mouseY, translateX: '-50%', translateY: '-50%' }} 
         className="fixed top-0 left-0 pointer-events-none z-50 hidden md:block"
@@ -269,7 +260,7 @@ function Services() {
   );
 }
 
-// --- 5. TESTIMONIALS (Відновлено) ---
+// --- 5. TESTIMONIALS ---
 function Testimonials() {
   const quotes = [
     { quote: "Synthesis feels less like an internal team and more like a top-tier agency.", name: "Anna Müller", role: "Global Marketing Lead" },
@@ -300,7 +291,7 @@ function Testimonials() {
   );
 }
 
-// --- 6. TEAM (Відновлено) ---
+// --- 6. TEAM ---
 function Team() {
   const [hoveredIndex, setHoveredIndex] = useState<number>(0);
 
@@ -348,13 +339,12 @@ function Team() {
   );
 }
 
-// --- 7. CONTACT FORM (Let's build it) ---
+// --- 7. CONTACT FORM ---
 function ContactForm() {
   return (
     <section className="bg-white py-16 px-4 md:px-8 border-t border-gray-100">
       <div className="max-w-[90rem] mx-auto bg-[#F9FAF8] rounded-[2rem] overflow-hidden flex flex-col lg:flex-row shadow-sm border border-gray-100">
         
-        {/* Left Side: Form */}
         <div className="w-full lg:w-1/2 p-10 md:p-16 lg:p-24 flex flex-col justify-center">
           <h2 className="font-syne text-5xl md:text-7xl font-bold text-[#1A1F24] leading-tight tracking-tight">
             Got a brief?<br />Let's build it.
@@ -402,12 +392,11 @@ function ContactForm() {
           </form>
         </div>
 
-        {/* Right Side: Friendly Farmer Image & Info */}
         <div className="w-full lg:w-1/2 p-4 flex flex-col">
           <div className="flex-1 rounded-[1.5rem] overflow-hidden bg-gray-100 relative min-h-[400px]">
             <img 
               src="https://images.unsplash.com/photo-1560493676-04071c5f467b?w=800&q=80" 
-              alt="Friendly farmer with tablet" 
+              alt="Friendly farmer" 
               className="absolute inset-0 w-full h-full object-cover" 
             />
           </div>
